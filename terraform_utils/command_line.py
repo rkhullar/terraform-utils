@@ -67,15 +67,23 @@ def infer_params(project_dir: Path, work_dir: Path = None,
 def build_output(data: Dict[str, str], key: str = None, component: str = None,
                  prefix: str = '{app_name}-', suffix: str = '-{app_env}-{company}',
                  bucket_name: str = 'terraformstate', table_name: str = 'terraformlock',
-                 state_name: str = 'terraform.tfstate') -> str:
-    print(data)
-    print(key)
-    print(component)
-    print(prefix)
-    print(suffix)
-    print(bucket_name)
-    print(table_name)
-    print(state_name)
+                 state_name: str = 'terraform.tfstate', app_env_var: str = 'app_env') -> str:
+
+    if key:
+        return data.get(key)
+
+    if component == 'env':
+        return data[app_env_var]
+
+    if component == 'bucket':
+        return prefix.format(**data) + bucket_name + suffix.format(**data)
+
+    if component == 'table':
+        return prefix.format(**data) + table_name + suffix.format(**data)
+
+    if component == 'object':
+        state_path = Path(data['construct']) / state_name
+        return str(state_path)
 
 
 def main():
@@ -89,5 +97,7 @@ def main():
     infer_data = infer_params(project_dir=target.parent, app_env_var=args.env_var, app_env_pos=args.env_pos)
     data = {**config_data, **infer_data}
     output = build_output(data, key=args.key, component=args.component, prefix=args.prefix, suffix=args.suffix,
-                          bucket_name=args.bucket_name, table_name=args.table_name, state_name=args.state_name)
-    print(output, end='')
+                          bucket_name=args.bucket_name, table_name=args.table_name, state_name=args.state_name,
+                          app_env_var=args.env_var)
+    if output:
+        print(output, end='')

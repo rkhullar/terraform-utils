@@ -1,22 +1,19 @@
 from setuptools import setup
+from typing import Union
+from pathlib import Path
 
 
-def version():
-    with open('version.txt', 'r') as f:
+def read_file(path: Union[str, Path]) -> str:
+    with Path(path).open('r') as f:
         return f.read().strip()
 
 
-def readme():
-    with open('readme.md', 'r') as f:
-        return f.read()
-
-
 setup(name='terraform-utils',
-      version=version(),
+      version=read_file('version.txt'),
       url='https://github.com/rkhullar/terraform-utils',
       author='Rajan Khullar',
       author_email='rkhullar@nyit.edu',
-      long_description=readme(),
+      long_description=read_file('readme.md'),
       keywords='terraform terragrunt',
       license='MIT',
       packages=['terraform_utils'],

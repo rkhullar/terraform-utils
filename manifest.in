@@ -1,0 +1,2 @@
+include readme.md
+include terraform_utils/data/*.txt

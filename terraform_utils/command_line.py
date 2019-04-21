@@ -12,9 +12,11 @@ def build_parser():
     parser.add_argument('-x', '--extension', type=str, default='tfvars')
     parser.add_argument('--bucket-name', type=str, default='terraformstate')
     parser.add_argument('--table-name', type=str, default='terraformlock')
-    parser.add_argument('--prefix', type=str, default='${app_name}-')
-    parser.add_argument('--suffix', type=str, default='-${env}-${company}')
+    parser.add_argument('--prefix', type=str, default='{app_name}-')
+    parser.add_argument('--suffix', type=str, default='-{app_env}-{company}')
     parser.add_argument('--state-name', type=str, default='terraform.tfstate')
+    parser.add_argument('--env-var', type=str, default='app_env')
+    parser.add_argument('--env_pos', type=int, default=0)
     return parser
 
 
@@ -50,6 +52,32 @@ def load_config(path: Path) -> Dict[str, str]:
     return {var.key: var.val for var in parse_config(path)}
 
 
+def infer_params(project_dir: Path, work_dir: Path = None,
+                 app_env_var: str = 'app_env', app_env_pos: int = 0,
+                 construct_var: str = 'construct') -> Dict[str, str]:
+    work_dir = work_dir or Path().absolute()
+    rel_path = work_dir.relative_to(project_dir)
+    construct_parts = list(rel_path.parts)
+    return {
+        app_env_var: construct_parts.pop(app_env_pos),
+        construct_var: str(Path(*construct_parts))
+    }
+
+
+def build_output(data: Dict[str, str], key: str = None, component: str = None,
+                 prefix: str = '{app_name}-', suffix: str = '-{app_env}-{company}',
+                 bucket_name: str = 'terraformstate', table_name: str = 'terraformlock',
+                 state_name: str = 'terraform.tfstate') -> str:
+    print(data)
+    print(key)
+    print(component)
+    print(prefix)
+    print(suffix)
+    print(bucket_name)
+    print(table_name)
+    print(state_name)
+
+
 def main():
     parser = build_parser()
     args = parser.parse_args()
@@ -57,9 +85,9 @@ def main():
     target = find_target(name)
     if not target:
         return
-    data = load_config(target)
-    print(data)
-
-    here = Path().absolute()
-    construct = here.relative_to(target.parent)
-    print(construct)
+    config_data = load_config(target)
+    infer_data = infer_params(project_dir=target.parent, app_env_var=args.env_var, app_env_pos=args.env_pos)
+    data = {**config_data, **infer_data}
+    output = build_output(data, key=args.key, component=args.component, prefix=args.prefix, suffix=args.suffix,
+                          bucket_name=args.bucket_name, table_name=args.table_name, state_name=args.state_name)
+    print(output, end='')

@@ -36,7 +36,7 @@ class Variable(NamedTuple):
 
     @staticmethod
     def build_pattern() -> Pattern:
-        return re.compile('^\s*"?(?P<key>[-.\w]+)"?\s*=\s*"?(?P<val>[-.\w]+)"?\s*(\Z|#.*)$')
+        return re.compile('^\s*"?(?P<key>[-.\w]+)"?\s*=\s*"?(?P<val>[-.\w@]+)"?\s*(\Z|#.*)$')
 
 
 def parse_config(path: Path) -> Iterator[Variable]:

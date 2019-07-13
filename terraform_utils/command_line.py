@@ -1,6 +1,6 @@
 from typing import Dict, Iterator, NamedTuple, Pattern
 from argparse import ArgumentParser
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 import re
 
 
@@ -83,6 +83,7 @@ def build_output(data: Dict[str, str], key: str = None, component: str = None,
 
     if component == 'object':
         state_path = Path(data['construct']) / state_name
+        state_path = PurePosixPath(state_path)
         return str(state_path)
 
 

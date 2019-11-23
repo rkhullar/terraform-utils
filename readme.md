@@ -3,6 +3,7 @@
 ### Notes
 ``` sh
 docker run -d --name sonarqube -p 9000:9000 sonarqube
+pip install coverage
 nosetests --with-xunit --with-coverage --cover-xml
 sonar-scanner -D project.settings=cicd/sonar-project.properties
 ```

@@ -1,8 +1,9 @@
-from typing import Dict, Iterator, NamedTuple, Pattern
+from typing import Dict, Iterator, List, NamedTuple, Optional, Pattern, Union
 from pathlib import Path
 import re
 
-__all__ = ['read_hello_txt', 'Variable', 'find_target', 'parse_config', 'load_config']
+__all__ = ['read_hello_txt', 'Variable', 'find_target', 'parse_config', 'load_config',
+           'build_default_common_values', 'write_common_values']
 
 
 def read_hello_txt() -> str:
@@ -20,8 +21,12 @@ class Variable(NamedTuple):
     def build_pattern() -> Pattern:
         return re.compile(r'^\s*"?(?P<key>[-.\w]+)"?\s*=\s*"?(?P<val>[-.\w@]+)"?\s*(\Z|#.*)$')
 
+    @classmethod
+    def from_dict(cls, data) -> List['Variable']:
+        return [Variable(key, val) for key, val in data.items()]
 
-def find_target(name: str, start_dir: Path = None, root_dir: Path = None) -> Path:
+
+def find_target(name: str, start_dir: Path = None, root_dir: Path = None) -> Optional[Path]:
     work_dir = start_dir or Path().absolute()
     root_dir = root_dir or Path(work_dir.root)
     while work_dir != root_dir:
@@ -42,3 +47,14 @@ def parse_config(path: Path) -> Iterator[Variable]:
 
 def load_config(path: Path) -> Dict[str, str]:
     return {var.key: var.val for var in parse_config(path)}
+
+
+def build_default_common_values() -> Dict[str, str]:
+    return dict(app_name='example', region='us-east-1', company='company', owner='noreply@example.com')
+
+
+def write_common_values(target: Union[Path, str], common_values: Dict[str, str] = None):
+    common_values = common_values or build_default_common_values()
+    with Path(target).open('w') as f:
+        for key, val in common_values.items():
+            print(f'{key} = {val}', file=f)

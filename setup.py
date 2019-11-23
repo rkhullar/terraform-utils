@@ -30,6 +30,6 @@ setup(name='terraform-utils',
       include_package_data=True,
       zip_safe=False,
       test_suite='nose.collector',
-      tests_require=['nose'],
+      tests_require=['nose', 'parameterized'],
       entry_points={'console_scripts': ['tf-util=terraform_utils.command_line:main']}
       )

@@ -2,6 +2,8 @@ from typing import Dict, Iterator, NamedTuple, Pattern
 from pathlib import Path
 import re
 
+__all__ = ['read_hello_txt', 'Variable', 'find_target', 'parse_config', 'load_config']
+
 
 def read_hello_txt() -> str:
     here: Path = Path(__file__).parent
@@ -40,11 +42,3 @@ def parse_config(path: Path) -> Iterator[Variable]:
 
 def load_config(path: Path) -> Dict[str, str]:
     return {var.key: var.val for var in parse_config(path)}
-
-
-def infer_params(project_dir: Path, work_dir: Path = None, construct_var: str = 'construct',
-                 app_env_var: str = 'app_env', app_env_pos: int = 0) -> Dict[str, str]:
-    work_dir: Path = work_dir or Path().absolute()
-    relative_path: Path = work_dir.relative_to(project_dir)
-    construct_parts = list(relative_path.parts)
-    return {app_env_var: construct_parts.pop(app_env_pos), construct_var: str(Path(*construct_parts))}

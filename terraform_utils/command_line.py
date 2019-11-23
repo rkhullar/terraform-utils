@@ -1,6 +1,6 @@
-from .utils import find_target, infer_params, load_config
 from argparse import ArgumentParser, Namespace
-from .core import build_output
+from .core import build_output, infer_params
+from .utils import find_target, load_config
 from pathlib import Path
 from typing import Dict
 

@@ -1,6 +1,6 @@
 
-# Created by https://www.gitignore.io/api/linux,macos,python,windows,jetbrains+all
-# Edit at https://www.gitignore.io/?templates=linux,macos,python,windows,jetbrains+all
+# Created by https://www.gitignore.io/api/linux,macos,python,windows,sonarqube,jetbrains+all
+# Edit at https://www.gitignore.io/?templates=linux,macos,python,windows,sonarqube,jetbrains+all
 
 ### JetBrains+all ###
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and WebStorm
@@ -236,6 +236,18 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+### SonarQube ###
+# SonarQube ignore files.
+#
+# https://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner
+# Sonar Scanner working directories
+.sonar/
+.scannerwork/
+
+# http://www.sonarlint.org/commandline/
+# SonarLint working directories, configuration files (including credentials)
+.sonarlint/
+
 ### Windows ###
 # Windows thumbnail cache files
 Thumbs.db
@@ -262,4 +274,4 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-# End of https://www.gitignore.io/api/linux,macos,python,windows,jetbrains+all
+# End of https://www.gitignore.io/api/linux,macos,python,windows,sonarqube,jetbrains+all

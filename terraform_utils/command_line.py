@@ -17,12 +17,12 @@ def build_parser():
     parser.add_argument('--suffix', type=str, default='-{app_env}-{company}')
     parser.add_argument('--state-name', type=str, default='terraform.tfstate')
     parser.add_argument('--env-var', type=str, default='app_env')
-    parser.add_argument('--env_pos', type=int, default=0)
+    parser.add_argument('--env-pos', type=int, default=0)
     return parser
 
 
 def main():
-    parser: ArgumentParser= build_parser()
+    parser: ArgumentParser = build_parser()
     args: Namespace = parser.parse_args()
     name: str = f'{args.target}.{args.extension}'
     target: Path = find_target(name)

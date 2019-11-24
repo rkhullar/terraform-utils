@@ -9,7 +9,10 @@ def infer_params(project_dir: Path, work_dir: Path = None, construct_var: str = 
     work_dir: Path = work_dir or Path().absolute()
     relative_path: Path = work_dir.relative_to(project_dir)
     construct_parts = list(relative_path.parts)
-    return {app_env_var: construct_parts.pop(app_env_pos), construct_var: str(Path(*construct_parts))}
+    # construct_parts is empty when project_dir matches work_dir
+    app_env = construct_parts.pop(app_env_pos) if len(construct_parts) > 0 else None
+    construct = str(Path(*construct_parts)) if len(construct_parts) > 0 else None
+    return {app_env_var: app_env, construct_var: construct}
 
 
 def build_output(data: Dict[str, str], key: str = None, component: str = None,

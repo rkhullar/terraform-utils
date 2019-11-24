@@ -26,13 +26,24 @@ def main():
     args: Namespace = parser.parse_args()
     name: str = f'{args.target}.{args.extension}'
     target: Path = find_target(name)
+
+    # TODO: add error handling
+
     if not target:
+        print('could not find project root')
         return
+
     config_data: Dict[str, str] = load_config(target)
     infer_data: Dict[str, str] = infer_params(project_dir=target.parent, app_env_var=args.env_var, app_env_pos=args.env_pos)
     data: Dict[str, str] = {**config_data, **infer_data}
+
+    if not data[args.env_var] or not data['construct']:
+        print('could not determine environment or construct')
+        return
+
     output: str = build_output(data, key=args.key, component=args.component, prefix=args.prefix, suffix=args.suffix,
                                bucket_name=args.bucket_name, table_name=args.table_name, state_name=args.state_name,
                                app_env_var=args.env_var)
+
     if output:
         print(output, end='')

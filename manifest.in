@@ -1,2 +1,4 @@
 include readme.md
 include terraform_utils/data/*.txt
+include terraform_utils/data/*.tfvars
+include terraform_utils/data/*.hcl

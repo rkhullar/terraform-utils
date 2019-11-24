@@ -2,12 +2,14 @@ from typing import Dict, Iterator, List, NamedTuple, Optional, Pattern, Union
 from pathlib import Path
 import re
 
+from .mockio import mock_input_output
+
 __all__ = ['read_hello_txt', 'Variable', 'find_target', 'parse_config', 'load_config',
-           'build_default_common_values', 'write_common_values']
+           'build_default_common_values', 'write_common_values', 'mock_input_output']
 
 
 def read_hello_txt() -> str:
-    here: Path = Path(__file__).parent
+    here: Path = Path(__file__).parents[1]
     target = here / 'data' / 'hello.txt'
     with target.open('r') as f:
         return f.read().strip()

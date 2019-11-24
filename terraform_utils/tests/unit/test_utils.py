@@ -55,3 +55,10 @@ class UtilsTest(TestCase):
             write_common_values(target, values)
             config = load_config(target)
             assert_equal(config, values)
+
+    def test_mock_io(self):
+        with mock_input_output() as mocked:
+            expected = 'hello world'
+            print(expected)
+        actual = mocked.stdout.read().strip('\r\n')
+        assert_equal(expected, actual)

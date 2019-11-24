@@ -14,7 +14,7 @@ remote_state {
       Environment = "${run_cmd("tf-util", "-c", "env")}"
       Owner       = "${run_cmd("tf-util", "-k", "owner")}"
       Name        = "Terraform Remote State"
-      ManagedBy   = "Terraform"
+      Managed     = "Terraform"
     }
 
     dynamodb_table_tags = {
@@ -22,7 +22,7 @@ remote_state {
       Environment = "${run_cmd("tf-util", "-c", "env")}"
       Owner       = "${run_cmd("tf-util", "-k", "owner")}"
       Name        = "Terraform Lock Table"
-      ManagedBy   = "Terraform"
+      Managed     = "Terraform"
     }
   }
 }

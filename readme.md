@@ -14,7 +14,7 @@ terraform {
 ```
 
 ### Project Structure
-If you are using terragrunt use two repositories to separate your live configuration from your modules. Here's what the tree structure for the live repo looks like. Within the root there are two files meant for [common values](data/common.tfvars) and [remote state management](data/terragrunt.hcl). The first level of folders correspond to each environment you want to create, i.e dev, qa, and prd. The nested folders represent individual constructs within an environment. The resources within a construct share the same terraform state and are managed together.
+If you are using terragrunt use two repositories to separate your live configuration from your modules. Here's what the tree structure for the live repo looks like. Within the root there are two files meant for [common values](terraform_utils/data/common.tfvars) and [remote state management](terraform_utils/data/terragrunt.hcl). The first level of folders correspond to each environment you want to create, i.e dev, qa, and prd. The nested folders represent individual constructs within an environment. The resources within a construct share the same terraform state and are managed together.
 ```
 .
 ├── common.tfvars

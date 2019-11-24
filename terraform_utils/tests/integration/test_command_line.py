@@ -38,11 +38,22 @@ class MainTest(TestCase):
         ('stg', 'network', ['-k', 'owner'], 'noreply@example.com'),
     ])
     def test_main(self, app_env: str, construct: str, args: List[str], expected: str):
+        os_work_dir, sys_argv = os.getcwd(), sys.argv
+
         with tempfile.TemporaryDirectory() as temp_dir, mock_input_output() as mocked:
             live_dir = Path(temp_dir) / 'live'
             setup_project(path=live_dir, constructs=[construct], envs=[app_env])
             write_common_values(live_dir / 'common.tfvars')
+
+            # temporarily set working directory and system args
             os.chdir(live_dir / app_env / construct)
             sys.argv[1:] = args
+
+            # run entry point function
             main()
+
+            # replace working directory and system args
+            os.chdir(os_work_dir)
+            sys.argv = sys_argv
+
         assert_equal(expected, mocked.stdout.read())

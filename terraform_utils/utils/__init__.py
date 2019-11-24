@@ -59,4 +59,4 @@ def write_common_values(target: Union[Path, str], common_values: Dict[str, str] 
     common_values = common_values or build_default_common_values()
     with Path(target).open('w') as f:
         for key, val in common_values.items():
-            print(f'{key} = {val}', file=f)
+            print(f'{key} = "{val}"', file=f)

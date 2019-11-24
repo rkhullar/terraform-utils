@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 from typing import Union
 from pathlib import Path
 import subprocess
@@ -24,9 +24,9 @@ setup(name='terraform-utils',
       author_email='rkhullar03@gmail.com',
       long_description=read_file('readme.md'),
       long_description_content_type='text/markdown',
-      keywords='terraform terragrunt',
+      keywords='terraform terragrunt aws',
       license='MIT',
-      packages=['terraform_utils'],
+      packages=find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"]),
       install_requires=[],
       include_package_data=True,
       zip_safe=False,

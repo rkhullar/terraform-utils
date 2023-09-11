@@ -1,10 +1,16 @@
+## Deprecation Notice
+The `tf-util` command was useful early on in terragrunt before it was possible to implement the logic directly in the root
+`terragrunt.hcl` file. See the following medium tutorial for more details:
+- [Managing AWS Infrastructure with Terraform and Terragrunt][medium-tutorial]
+
 ## Terraform Utils
+This project provides a helper command intended to be used with [terraform][terraform-github] and [terragrunt][terragrunt-github]
+for applications hosted on AWS. The utility is available on [pypi][pypi-link] and requires Python 3.6.1+.
 
-This project provides a helper command intended to be used with [terraform][terraform-github] and [terragrunt][terragrunt-github] for applications hosted on AWS. The utility is available on [pypi][pypi-link] and requires Python 3.6.1+.
+One of the ways terragrunt helps keep infrastructure code DRY is by injecting the remote state configuration to the current module.
+The `tf-util` command generates names for the terraform state bucket, object, and lock table based on the protect structure.
 
-One of the ways terragrunt helps keep infrastructure code DRY is by injecting the remote state configuration to the current module. The `tf-util` command generates names for the terraform state bucket, object, and lock table based on the protect structure.
-
-``` hcl
+```terraform
 # modules/app/main.tf
 terraform {
   required_version = ">= 0.12"
@@ -14,37 +20,40 @@ terraform {
 ```
 
 ### Project Structure
-If you are using terragrunt use two repositories to separate your live configuration from your modules. Here's what the tree structure for the live repo looks like. Within the root there are two files meant for [common values](terraform_utils/data/common.tfvars) and [remote state management](terraform_utils/data/terragrunt.hcl). The first level of folders correspond to each environment you want to create, i.e dev, qa, and prd. The nested folders represent individual constructs within an environment. The resources within a construct share the same terraform state and are managed together.
-```
-.
-├── common.tfvars
-├── dev
-│   ├── app
-│   │   └── terragrunt.hcl
-│   ├── iam
-│   │   └── terragrunt.hcl
-│   └── network
-│       └── terragrunt.hcl
-└── terragrunt.hcl
+If you are using terragrunt use two repositories to separate your live configuration from your modules. Here's what the
+tree structure for the live repo looks like. Within the root there are two files meant for [common values](terraform_utils/data/common.tfvars)
+and [remote state management](terraform_utils/data/terragrunt.hcl). The first level of folders correspond to each environment
+you want to create, i.e dev, qa, and prd. The nested folders represent individual constructs within an environment. The
+resources within a construct share the same terraform state and are managed together.
+```text
+|-- common.tfvars
+|-- terragrunt.hcl
+`-- dev
+    |-- app
+    |   `-- terragrunt.hcl
+    |-- iam
+    |   `-- terragrunt.hcl
+    `-- network
+        `-- terragrunt.hcl
 ```
 
 ### Example Usage
-```
-$ pip install terraform-utils
-$ cd path/to/live/repo
-# verifiy content of common.tfvars
-$ cd dev/network
-$ tf-util -c bucket
-example-terraformstate-dev-company
-$ tf-util -c object
-app/terraform.tfstate
-$ tf-util -c table
-example-terraformlock-dev-company
+```shell
+pip install terraform-utils
+cd path/to/live/repo
+# verify content of common.tfvars
+cd dev/network
+tf-util -c bucket
+# example-terraformstate-dev-company
+tf-util -c object
+# app/terraform.tfstate
+tf-util -c table
+# example-terraformlock-dev-company
 ```
 
 ### Code Quality
 Run the following commands to analyze the project with sonar.
-``` sh
+```shell
 docker run -d --name sonarqube -p 9000:9000 sonarqube
 pip install coverage
 nosetests --with-xunit --with-coverage --cover-xml
@@ -54,3 +63,4 @@ sonar-scanner -D project.settings=cicd/sonar-project.properties
 [terraform-github]: https://github.com/hashicorp/terraform
 [terragrunt-github]: https://github.com/gruntwork-io/terragrunt
 [pypi-link]: https://pypi.org/project/terraform-utils
+[medium-tutorial]: https://medium.com/@rajan-khullar/managing-aws-infrastructure-with-terraform-and-terragrunt-42f88440fe15
